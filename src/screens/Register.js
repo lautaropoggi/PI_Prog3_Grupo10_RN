@@ -29,27 +29,15 @@ export default class Register extends Component {
 
     this.setState({ error: "" });
 
-    auth
-      .createUserWithEmailAndPassword(email, password)
-      .then(() => {
-        db.collection("users")
-          .add({
-            email: auth.currentUser.email,
-            username: username,
-            createdAt: Date.now(),
-          })
-          .then(() => {
-            this.props.navigation.navigate("Login");
-          })
-          .catch(() => {
-            this.setState({ error: "No se pudo guardar el usuario en la base de datos" });
-          });
-      })
-      .catch((error) => {
-        let msg = "No se pudo crear la cuenta";
-        if (error.code === "auth/email-already-in-use") msg = "El email ya está registrado";
-        this.setState({ error: msg });
-      });
+   auth.createUserWithEmailAndPassword(email,password)
+              .then((user) => {  db.collection('users').add({
+                  owner: email,
+                  username: username, 
+                  createdAt: Date.now()
+              }) })
+              .then (() => this.props.navigation.navigate('Login'))
+              .catch((err)=> this.setState({error: err.message}, () => console.log(err)) 
+               )
   }
 
   render() {
@@ -60,39 +48,33 @@ export default class Register extends Component {
         <View style={styles.form}>
           <TextInput
             style={styles.input}
-            placeholder="tu@correo.com"
+            placeholder="Correo"
             keyboardType="default"
-            autoCapitalize="none"
-            autoCorrect={false}
             onChangeText={(text) => this.setState({ email: text })}
             value={this.state.email}
           />
           <TextInput
             style={styles.input}
-            placeholder="nombre de usuario"
-            autoCapitalize="none"
-            autoCorrect={false}
+            placeholder="Nombre de usuario"
             onChangeText={(text) => this.setState({ username: text })}
             value={this.state.username}
           />
           <TextInput
             style={styles.input}
-            placeholder="••••••••"
+            placeholder="Contraseña"
             secureTextEntry
-            autoCapitalize="none"
             onChangeText={(text) => this.setState({ password: text })}
             value={this.state.password}
           />
-          {this.state.error ? (
-            <Text style={{ color: "red", textAlign: "center" }}>{this.state.error}</Text>
-          ) : null}
+         {this.state.error ? <Text style={styles.errorText}>{this.state.error}</Text> : null}
+
           <Pressable
-            style={styles.button}
-            onPress={() =>
-              this.Register(this.state.username, this.state.email, this.state.password)
-            }
-          >
-            <Text style={styles.buttonText}>Enviar Registro</Text>
+          style={styles.button}
+          onPress={() => {
+          this.Register(this.state.username, this.state.email, this.state.password);
+          this.props.navigation.navigate('Home');
+          }}>
+          <Text style={styles.buttonText}>Registrarse</Text>
           </Pressable>
 
          <Pressable onPress={() => navigation.navigate('Login')} >
