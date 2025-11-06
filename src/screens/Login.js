@@ -9,30 +9,39 @@ export default class Login extends Component {
       username: "",
       email: "",
       password: "",
-       error: ''
-
+      error: "",
     };
   }
 
+  componentDidMount() {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        this.props.navigation.navigate("Home",);
+      }
+    });
+  }
+
   Login(email, password) {
-
-    if (!email.includes('@')) {
-      this.setState({ error: 'El mail debe contener @' });
+    if (!email.includes("@")) {
+      this.setState({ error: "El mail debe contener @" });
       return;
     }
 
-
-    if (!(password.length >= 6)) {
-      this.setState({ error: 'La contraseña debe tener mas de 6 caracteres' });
+    if (password.length < 6) {
+      this.setState({ error: "La contraseña debe tener más de 6 caracteres" });
       return;
     }
 
-
-   auth.signInWithEmailAndPassword(email,password)
-          .then((user) => {this.props.navigation.navigate('TabNavigator',{screen: "Home"})})
-          .catch((err)=> this.setState({error: err.message}, () => console.log("el error fue",err)) 
-           )
-        
+    auth
+      .signInWithEmailAndPassword(email, password)
+      .then(() => {
+        this.setState({ error: "" });
+        this.props.navigation.navigate("Home" );
+      })
+      .catch((error) => {
+        this.setState({ error: "Credenciales incorrectas" });
+        console.log("Error de login:", error);
+      });
   }
 
   render() {
@@ -63,18 +72,21 @@ export default class Login extends Component {
           onChangeText={(text) => this.setState({ password: text })}
         />
 
+    
+        {!!this.state.error && (
+          <Text style={styles.errorText}>{this.state.error}</Text>
+        )}
+
         <Pressable
           style={styles.button}
-          onPress={() => {
-              this.Login(this.state.email, this.state.password);
-              this.props.navigation.navigate('Home');
-               }}
+          onPress={() => this.Login(this.state.email, this.state.password)}
         >
           <Text style={styles.buttonText}>Login</Text>
         </Pressable>
+
         <Pressable
           style={styles.registerButton}
-          onPress={() => this.props.navigation.navigate('Register')}
+          onPress={() => this.props.navigation.navigate("Register")}
         >
           <Text style={styles.registerText}>No tengo cuenta</Text>
         </Pressable>
@@ -84,8 +96,18 @@ export default class Login extends Component {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, justifyContent: "center", backgroundColor: "#fff" },
-  title: { fontSize: 22, fontWeight: "700", textAlign: "center", marginBottom: 16 },
+  container: {
+    flex: 1,
+    padding: 16,
+    justifyContent: "center",
+    backgroundColor: "#fff",
+  },
+  title: {
+    fontSize: 22,
+    fontWeight: "700",
+    textAlign: "center",
+    marginBottom: 16,
+  },
   field: {
     borderWidth: 1,
     borderColor: "#ccc",
@@ -95,6 +117,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     marginBottom: 12,
   },
+  errorText: {
+    color: "red",
+    fontWeight: "600",
+    textAlign: "center",
+    marginBottom: 12,
+  },
   button: {
     backgroundColor: "#007bff",
     paddingVertical: 12,
@@ -102,4 +130,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonText: { color: "#fff", fontWeight: "700" },
+  registerButton: { marginTop: 12, alignItems: "center" },
+  registerText: { color: "#007bff" },
 });

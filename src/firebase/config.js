@@ -3,16 +3,15 @@ import firebase from "firebase"
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDgzA26EkzmWmVmXIcVFmzJ3R_CS7riPJ8",
-  authDomain: "mi-proyecto-en-firebase-a6ea8.firebaseapp.com",
-  projectId: "mi-proyecto-en-firebase-a6ea8",
-  storageBucket: "mi-proyecto-en-firebase-a6ea8.firebasestorage.app",
-  messagingSenderId: "247674507869",
-  appId: "1:247674507869:web:309dfd6a9cd5116e6af3b4"
-};
-
+  apiKey: "AIzaSyDypSkPmu3ow45xkqCYg17soeFw6JfhyJ0",
+  authDomain: "proyector-integrador.firebaseapp.com",
+  projectId: "proyector-integrador",
+  storageBucket: "proyector-integrador.firebasestorage.app",
+  messagingSenderId: "44937875659",
+  appId: "1:44937875659:web:10c0dcbc9be19add360b4e"}
 
 firebase.initializeApp(firebaseConfig)
 
 export const auth = firebase.auth();
 export const db = app.firestore();
+export const storage = app.storage();
