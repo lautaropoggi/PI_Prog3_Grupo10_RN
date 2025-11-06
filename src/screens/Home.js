@@ -7,8 +7,9 @@ export default class Home extends Component {
   render() {
     return (
       <View>
+         <Text>Home</Text>
 <Post/>
-        <Text>Home</Text>
+
       </View>
     )
   }
