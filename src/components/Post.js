@@ -1,76 +1,122 @@
-import { Text, View } from 'react-native'
-import React, { Component } from 'react'
-import { FlatList } from 'react-native-web'
-import { StyleSheet } from 'react-native'
-import {db,auth} from '../firebase/config'
 
+import React, { Component } from "react";
+import { View, Text, StyleSheet, Pressable } from "react-native";
+import firebase from "firebase";
+import { db, auth } from "../firebase/config";
 
 export default class Post extends Component {
-constructor(props){
-    super(props)
+  constructor(props) {
+    super(props);
     this.state = {
-      posts: []
-    }
-
-      db.collection('posts').onSnapshot(
-    docs => {
-      let posts = []
-      docs.forEach( doc => {
-        posts.push({
-          id: doc.id,
-          data: doc.data()
-        })
-        this.setState({
-          posts: posts
-        })   
-        console.log(this.state.posts)
-      })
-    })
-
+      meGusta: false,
+    };
   }
-
-
-
+  componentDidMount(){
+     let meGusta = this.props.data.likes.includes(auth.currentUser.email) 
+     this.setState({
+      meGusta: meGusta
+     })
+  }
+    
+  agregarMG() {
+    db.collection("posts")
+      .doc(this.props.id)
+      .update({
+        likes: firebase.firestore.FieldValue.arrayUnion(auth.currentUser.email),
+      })
+      .then(() =>
+        this.setState({
+          meGusta: true
+        })
+      );
+  }
+  sacarMG() {
+    db.collection("posts")
+      .doc(this.props.id)
+      .update({
+        likes: firebase.firestore.FieldValue.arrayRemove(
+          auth.currentUser.email
+        ),
+      })
+      .then(() =>
+        this.setState({
+          meGusta: false
+        })
+      );
+  }
   render() {
     return (
-      <View style = {styles.flatlist}> 
-      <FlatList
-      data={[{nombre: "Lamine", id: 1}, {nombre: "Sadio", id: 2}, {nombre: "Mane", id: 3}, {nombre: "Keita", id: 4}, {nombre: "Diaz", id: 5}, {nombre: "Firmino", id: 6}, {nombre: "Alisson", id: 7}]}
-      keyExtractor={item => item.id.toString()}
-      renderItem={({item}) => 
-    
-    <View style = {styles.post}>
-        <Text>{item.nombre}</Text>
-        <Text>TEXT</Text>
-      </View> 
-    }>
+      <View style={styles.container}>
 
-    </FlatList>
+        <Text style={styles.owner}>{this.props.data.owner}</Text>
+
+        <Text style={styles.posteo}>{this.props.data.posteo}</Text>
+
+        <Text>{this.props.data.descripcion}</Text>
+
+        <View style={styles.botones}>
+        {this.state.meGusta ? (
+          <Pressable style={styles.button} onPress={() => this.sacarLike(this.props.id)}>
+            <Text style={styles.buttonText}>No me gusta</Text>
+          </Pressable>
+        ) : (
+          <Pressable style={styles.button} onPress={() => this.agregarMG(this.props.id)}>
+            <Text style={styles.buttonText}>Me gusta</Text>
+          </Pressable>
+        )}
+        <Text>{this.props.data.likes.length} 💙</Text>
+
+        <Pressable
+        style={styles.button}
+          onPress={() => this.props.navigation.navigate("Comentarios", { id: this.props.id}) }>
+          <Text style={styles.buttonText}>Comentar</Text>
+        </Pressable>
+
+        </View>
       </View>
-    )
+    );
   }
 }
-const styles = StyleSheet.create({
-  flatlist: {
-    width: '100%',
-    flex: 1,
-    alignItems: 'center',
-    marginTop: 20,
 
-  },
-  post: {
-    backgroundColor: '#fff',
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: "#fff",
     borderRadius: 10,
-    padding: 20,
-    marginBottom: 20,
-    width: 300,
-    alignItems: 'center',
+    padding: 16,
+    marginVertical: 10,
+    marginHorizontal: 16,
     shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-  } 
-})
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 3,
+  },
+  owner: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: "#007bff",
+    marginBottom: 6,
+  },
+  posteo: {
+    fontSize: 16,
+    color: "#333",
+    marginBottom: 8,
+  },
+  botones: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 12,
+  },
+  button: {
+    backgroundColor: "#007bff",
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderRadius: 8,
+  },
+  buttonText: {
+    color: "#fff",
+    fontWeight: "700",
+    fontSize: 14,
+  },
+});
