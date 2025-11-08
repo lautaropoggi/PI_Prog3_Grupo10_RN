@@ -7,6 +7,7 @@ export default class Posteo extends Component {
     super(props);
     this.state = {
       posteo: "",
+      subido: false
     };
   }
   CrearPosteo(descripcion) {
@@ -19,7 +20,9 @@ export default class Posteo extends Component {
           likes: [],
           comentarios: []
         })
-        .then((resp) => this.props.navigation.navigate("StackComentarios", { screen: "Home" }))
+        .then(()=> this.setState({ subido: true }))
+        .then(() => this.setState({ posteo: "" }))
+        .then(() => this.props.navigation.navigate("Home"))
         .catch((err) => console.log(err));
     }
   }
@@ -36,12 +39,15 @@ export default class Posteo extends Component {
             placeholder="Escribe lo que quieras decir..."
             onChangeText={(text) => this.setState({ posteo: text })}
             value={this.state.posteo} />
-
+           {this.state.posteo =="" ? null : <Text>{this.state.posteo.length}/250</Text>}
           <Pressable
             style={styles.button}
             onPress={() => this.CrearPosteo(this.state.posteo)} >
             <Text style={styles.buttonText}>Publicar Posteo</Text>
           </Pressable>
+
+          {this.subido ? <Text>Tu posteo ha sido publicado!</Text> : null}
+
           
         </View>
       </View>
