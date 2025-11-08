@@ -56,15 +56,15 @@ export default class Post extends Component {
 
         <View style={styles.botones}>
         {this.state.meGusta ? (
-          <Pressable style={styles.button} onPress={() => this.sacarLike(this.props.id)}>
-            <Text style={styles.buttonText}>No me gusta</Text>
+          <Pressable  onPress={() => this.sacarMG(this.props.id)}>
+        <Text>{this.props.data.likes.length} 💙</Text>
           </Pressable>
         ) : (
-          <Pressable style={styles.button} onPress={() => this.agregarMG(this.props.id)}>
-            <Text style={styles.buttonText}>Me gusta</Text>
+          <Pressable  onPress={() => this.agregarMG(this.props.id)}>
+            <Text>{this.props.data.likes.length} 🤍</Text>
           </Pressable>
         )}
-        <Text>{this.props.data.likes.length} 💙</Text>
+      
 
         <Pressable
         style={styles.button}
