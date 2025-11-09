@@ -36,7 +36,7 @@ export default class Posteo extends Component {
           <TextInput
             style={styles.input}
             keyboardType="default"
-            placeholder="Escribe lo que quieras decir..."
+            placeholder="Escribe aqui tu comentario!"
             onChangeText={(text) => this.setState({ posteo: text })}
             value={this.state.posteo} />
            {this.state.posteo =="" ? null : <Text>{this.state.posteo.length}/250</Text>}

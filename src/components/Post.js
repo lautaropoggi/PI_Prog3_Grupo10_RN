@@ -68,7 +68,7 @@ export default class Post extends Component {
 
         <Pressable
         style={styles.button}
-          onPress={() => this.props.navigation.navigate("Comentarios", { id: this.props.id}) }>
+          onPress={() => this.props.navigation.navigate("Comments", { id: this.props.id}) }>
           <Text style={styles.buttonText}>Comentar</Text>
         </Pressable>
 

@@ -51,9 +51,8 @@ componentDidMount() {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.title}>Mi Perfil</Text>
-        <Text style={styles.text}>Usuario: @{this.state.user.username}</Text>
-        <Text style={styles.text}>Mail: {this.state.user.owner}</Text>
+        <Text style={styles.usuario}>{this.state.user.username}</Text>
+        <Text style={styles.mail}>{this.state.user.owner}</Text>
 <Text style={styles.text}>Cantidad de posteos: {this.state.posts.length}</Text>
 
   {this.state.posts.length != 0 ? (
@@ -88,19 +87,17 @@ const styles = StyleSheet.create({
   },
     FlatListContainer: {
     flex: 1,
-    backgroundColor: "#f5f6fa",
     paddingHorizontal: 16,
     paddingTop: 20,
   },
-  title: {
-    fontSize: 22,
+  usuario: {
+    fontSize: 25,
     fontWeight: "700",
-    marginBottom: 20,
+    marginBottom: 10,
   },
-  text: {
-    fontSize: 16,
-    marginBottom: 30,
-  },
+  mail: {
+    fontSize: 14,
+    marginBottom: 10,},
   logoutButton: {
     backgroundColor: "#dc3545",
     paddingVertical: 12,
