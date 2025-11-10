@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { View, Text, Pressable, StyleSheet } from "react-native";
 import { auth, db } from "../firebase/config";
 import { FlatList } from "react-native-web";
-
+import Post from "../components/Post";
 export default class Profile extends Component {
   constructor(props) {
     super(props);
@@ -13,7 +13,10 @@ export default class Profile extends Component {
     };
   }
 
+
 componentDidMount() {
+console.log('props profile',this.props)
+
   db.collection("users").where("owner" , "==", this.state.email).onSnapshot((docs) => {
     let userDoc = [];
     docs.forEach((doc) => {
@@ -30,6 +33,7 @@ componentDidMount() {
     docs.forEach((doc) => {
    
       postsDocs.push({
+        id: doc.id,
         post: doc.data()
       });
       console.log("b" + postsDocs)  
@@ -49,6 +53,7 @@ componentDidMount() {
   }
 
   render() {
+    console.log(this.state.posts);
     return (
       <View style={styles.container}>
         <Text style={styles.usuario}>{this.state.user.username}</Text>
@@ -61,10 +66,7 @@ componentDidMount() {
                              data={this.state.posts}
                              keyExtractor={(item) => item.id}
                              renderItem={({ item }) => (
-                              <View style={styles.card}>
-                          <Text>{item.post.posteo}</Text> 
-                        <Text>Likes: {item.post.likes.length} Comentarios: {item.post.comentarios.length}</Text>
-                        </View>
+                                <Post data={item.post} id = {item.id} navigation={this.props.navigation} pantalla = {this.props.route.name}/>
                              )}
                            />
                          </View>) : (<Text style={styles.text}>No hay posteos aun</Text>)}

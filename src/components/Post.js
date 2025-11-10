@@ -57,18 +57,30 @@ export default class Post extends Component {
         <View style={styles.botones}>
         {this.state.meGusta ? (
           <Pressable  onPress={() => this.sacarMG(this.props.id)}>
-        <Text>{this.props.data.likes.length} 💙</Text>
+        <Text>{this.props.data.likes.length} <svg width="20" height="20" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+
+  <path d="M100 170 L40 100 A30 30 0 1 1 100 60 A30 30 0 1 1 160 100 Z" fill="red"/>
+</svg>
+</Text>
           </Pressable>
         ) : (
           <Pressable  onPress={() => this.agregarMG(this.props.id)}>
-            <Text>{this.props.data.likes.length} 🤍</Text>
+            <Text>{this.props.data.likes.length} <svg width="20" height="20" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+ 
+  <path d="M100 170 L40 100 A30 30 0 1 1 100 60 A30 30 0 1 1 160 100 Z" fill="white" stroke="red" stroke-width="4"/>
+</svg>
+</Text>
           </Pressable>
         )}
       
 
         <Pressable
         style={styles.button}
-          onPress={() => this.props.navigation.navigate("Comments", { id: this.props.id}) }>
+          onPress={() =>
+          this.props.pantalla === 'Profile' ?
+            this.props.navigation.navigate("Home", {screen: "Comments",params: { id: this.props.id}})
+          :
+          this.props.navigation.navigate("Comments", { id: this.props.id}) }>
           <Text style={styles.buttonText}>Comentar</Text>
         </Pressable>
 

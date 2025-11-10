@@ -29,6 +29,7 @@ export default class Home extends Component {
   }
 
   render() {
+    console.log(this.state.posteosRecuperados);
     return (
       <View style={styles.container}>
 

@@ -6,7 +6,7 @@ import Comments from '../screens/Comments';
 const Stack = createNativeStackNavigator();
 export default function StackNavigator2() {
     return (
-        <Stack.Navigator>
+        <Stack.Navigator intialRoute="Comments">
             <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
             <Stack.Screen name="Comments" component={Comments} options={{ headerShown: false }} />
         </Stack.Navigator>
