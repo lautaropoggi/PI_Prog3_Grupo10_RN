@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, FlatList } from 'react-native';
 import { db } from '../firebase/config';
+import { Image } from 'react-native-web';
 import Post from '../components/Post';
 
 export default class Home extends Component {
@@ -32,9 +33,7 @@ export default class Home extends Component {
     console.log(this.state.posteosRecuperados);
     return (
       <View style={styles.container}>
-
-        <Text style={styles.title}>Home</Text>
-
+       <Image source={require ("../../assets/favicon.png")} resizeMode='contain' style={styles.img}/>
         <View style={styles.formContainer}>
           <FlatList
             data={this.state.posteosRecuperados}
@@ -76,4 +75,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 40,
   },
+  img: {
+    width: 100,
+    height: 100,
+    alignSelf: 'center',
+    marginBottom: 20,
+
+  }
 });
